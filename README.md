@@ -117,25 +117,20 @@ The AWS SDK uses these files to authenticate and configure the AWS region.
 
 Create or update the credentials file at `~/.aws/credentials`:
 
-ini
-
-Copy code
-
+```ini
 `[default]
 aws_access_key_id = YOUR_ACCESS_KEY_ID
 aws_secret_access_key = YOUR_SECRET_ACCESS_KEY`
-
+```
 #### **2\. AWS Config File**
 
 Create or update the config file at `~/.aws/config`:
 
-ini
-
-Copy code
+```ini
 
 `[default]
 region = YOUR_AWS_REGION`
-
+````
 **Note:** Replace `YOUR_ACCESS_KEY_ID`, `YOUR_SECRET_ACCESS_KEY`, and `YOUR_AWS_REGION` with your actual AWS credentials and preferred region.
 
 #### **Alternative: Using Environment Variables**
