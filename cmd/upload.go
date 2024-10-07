@@ -1,10 +1,7 @@
 package cmd
 
 import (
-    "crypto/md5"
-    "encoding/hex"
     "fmt"
-    "io"
     "os"
     "path/filepath"
     "strings"
@@ -16,19 +13,13 @@ import (
     "github.com/spf13/cobra"
 )
 
-var (
-    inputDir       string
-    bucketName     string
-    endpointURL    string
-    region         string
-    deleteExtra    bool
-)
+
 
 var uploadCmd = &cobra.Command{
     Use:   "upload",
     Short: "Sync directory to S3 by comparing checksums",
     RunE: func(cmd *cobra.Command, args []string) error {
-        return syncDirectoryToS3(inputDir, bucketName)
+        return uploadToS3(inputDir, bucketName)
     },
 }
 
@@ -43,7 +34,7 @@ func init() {
     uploadCmd.MarkFlagRequired("bucket")
 }
 
-func syncDirectoryToS3(inputDir, bucketName string) error {
+func uploadToS3(inputDir, bucketName string) error {
     config := &aws.Config{
         Region: aws.String(region),
     }
@@ -156,22 +147,6 @@ func syncDirectoryToS3(inputDir, bucketName string) error {
     }
 
     return nil
-}
-
-func computeMD5Checksum(filePath string) (string, error) {
-    file, err := os.Open(filePath)
-    if err != nil {
-        return "", err
-    }
-    defer file.Close()
-
-    hash := md5.New()
-    if _, err := io.Copy(hash, file); err != nil {
-        return "", err
-    }
-
-    checksum := hex.EncodeToString(hash.Sum(nil))
-    return checksum, nil
 }
 
 func uploadFile(s3Client *s3.S3, bucketName, inputDir, relativePath string) error {

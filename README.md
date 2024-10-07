@@ -10,6 +10,8 @@ Table of Contents
 -   [Prerequisites](#prerequisites)
 -   [Installation](#installation)
 -   [Usage](#usage)
+    -   [Upload Mode](#upload-mode)
+    -   [Download Mode](#download-mode)
 -   [Configuration](#configuration)
 -   [Running Tests](#running-tests)
 -   [Project Structure](#project-structure)
@@ -68,6 +70,9 @@ Usage
 
 The CLI tool provides a command to sync directories to S3, comparing checksums to upload only new or changed files.
 
+
+Upload Mode
+-----------
 ### Command Syntax
 
 ```bash
@@ -99,7 +104,43 @@ The CLI tool provides a command to sync directories to S3, comparing checksums t
 #### **Sync Using LocalStack for Testing**
 
 ```bash
-`./s3uploader upload -i /path/to/inputdirectory -b test-bucket -e http://localhost:4566`
+./s3uploader upload -i /path/to/inputdirectory -b test-bucket -e http://localhost:4566`
+```
+
+Download Mode
+-----------
+### Command Syntax
+
+```bash
+./s3uploader download -o <output_directory> -b <bucket_name> [--region <aws_region>] [--endpoint <endpoint_url>] [--delete]
+```
+
+### Options
+
+-   `-o, --output`: **(Required)** Path to the output directory you want to sync.
+-   `-b, --bucket`: **(Required)** Name of the S3 bucket to sync with.
+-   `-r, --region`: *(Optional)* AWS region where the bucket is located (default: `us-east-1`).
+-   `-e, --endpoint`: *(Optional)* Custom AWS endpoint URL (useful for testing with LocalStack).
+-   `-d, --delete`: *(Optional)* Delete files in output directory that are not present in the s3.
+
+### Examples
+
+#### **Sync S3 Bucket with Local Directory**
+
+```bash
+./s3uploader download -o /path/to/outputdirectory -b my-s3-bucket
+```
+
+#### **Sync with Deletion of Extra S3 Objects**
+
+```bash
+./s3uploader download -o /path/to/outputdirectory -b my-s3-bucket --delete
+```
+
+#### **Sync Using LocalStack for Testing**
+
+```bash
+./s3uploader download -o /path/to/outputdirectory -b test-bucket -e http://localhost:4566`
 ```
 
 * * * * *
@@ -118,7 +159,7 @@ The AWS SDK uses these files to authenticate and configure the AWS region.
 Create or update the credentials file at `~/.aws/credentials`:
 
 ```ini
-`[default]
+[default]
 aws_access_key_id = YOUR_ACCESS_KEY_ID
 aws_secret_access_key = YOUR_SECRET_ACCESS_KEY`
 ```
@@ -127,8 +168,7 @@ aws_secret_access_key = YOUR_SECRET_ACCESS_KEY`
 Create or update the config file at `~/.aws/config`:
 
 ```ini
-
-`[default]
+[default]
 region = YOUR_AWS_REGION`
 ````
 **Note:** Replace `YOUR_ACCESS_KEY_ID`, `YOUR_SECRET_ACCESS_KEY`, and `YOUR_AWS_REGION` with your actual AWS credentials and preferred region.
@@ -211,7 +251,9 @@ Project Structure
 ├── cmd/
 │   ├── root.go          # Cobra root command
 │   ├── upload.go        # Upload command implementation (sync functionality)
+│   ├── download.go      # Download command implementation (sync functionality)
 │   └── upload_test.go   # Unit tests using LocalStack
+│   ├── download_test.go # Unit tests for download functionality using LocalStack
 ├── go.mod               # Go module file
 ├── go.sum               # Checksums for dependencies
 ├── main.go              # Main application entry point

@@ -16,7 +16,7 @@ import (
     "github.com/testcontainers/testcontainers-go/wait"
 )
 
-func TestSyncDirectoryToS3(t *testing.T) {
+func TestuploadToS3(t *testing.T) {
     ctx := context.Background()
 
     req := testcontainers.ContainerRequest{
@@ -73,9 +73,9 @@ func TestSyncDirectoryToS3(t *testing.T) {
     deleteExtra = false
 
     // Run the sync function (initial upload)
-    err = syncDirectoryToS3(inputDir, bucketName)
+    err = uploadToS3(inputDir, bucketName)
     if err != nil {
-        t.Fatalf("syncDirectoryToS3 failed: %v", err)
+        t.Fatalf("uploadToS3 failed: %v", err)
     }
 
     // Verify that the files were uploaded
@@ -114,9 +114,9 @@ func TestSyncDirectoryToS3(t *testing.T) {
     os.Remove(filepath.Join(tempDir, "mvs", "indexmvs.json"))
 
     // Run the sync function again without deletion
-    err = syncDirectoryToS3(inputDir, bucketName)
+    err = uploadToS3(inputDir, bucketName)
     if err != nil {
-        t.Fatalf("syncDirectoryToS3 failed: %v", err)
+        t.Fatalf("uploadToS3 failed: %v", err)
     }
 
     // List objects in the bucket after second sync
@@ -137,9 +137,9 @@ func TestSyncDirectoryToS3(t *testing.T) {
 
     // Now run sync with deletion of extra files
     deleteExtra = true
-    err = syncDirectoryToS3(inputDir, bucketName)
+    err = uploadToS3(inputDir, bucketName)
     if err != nil {
-        t.Fatalf("syncDirectoryToS3 with deleteExtra failed: %v", err)
+        t.Fatalf("uploadToS3 with deleteExtra failed: %v", err)
     }
 
     // List objects in the bucket after deletion
