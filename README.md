@@ -365,3 +365,6 @@ Contact
 -------
 
 For any questions or support, please open an issue on the GitHub repository or contact the maintainer at sidharth.sasikumar07@gmail.com.
+Go 1.25 or later is required for rooted filesystem operations. Downloads reject path traversal, confine writes to the output root, and replace files only after a complete download. Local symlinks abort synchronization.
+
+Run `go test -race ./...` for offline unit tests. Docker/LocalStack integration tests are opt-in with `go test -tags integration ./...`; they are not part of the offline suite.
