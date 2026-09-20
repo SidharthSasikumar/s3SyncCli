@@ -1,3 +1,5 @@
+//go:build integration
+
 package cmd
 
 import (
@@ -16,7 +18,7 @@ import (
     "github.com/testcontainers/testcontainers-go/wait"
 )
 
-func TestuploadToS3(t *testing.T) {
+func TestUploadToS3(t *testing.T) {
     ctx := context.Background()
 
     req := testcontainers.ContainerRequest{
